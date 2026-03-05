@@ -1,0 +1,20 @@
+CREATE TABLE tb_book(
+	book_id uuid not null primary key,
+	book_isbn varchar(20) not null,
+	book_name varchar(150) not null,
+	book_publication_date date not null,
+	book_genre varchar(30) not null,
+	book_price numeric(18, 2),
+	author_id uuid not null references tb_author(author_id)
+	constraint chk_book_genre check (book_genre in ('FICTION', 'FANTASY', 'MISTERY', 'NOVEL', 'BIOGRAPHY', 'HORROR'))
+);
+
+CREATE TABLE tb_author(
+	author_id uuid not null primary key,
+	author_name varchar(100) not null,
+	author_birthdate date not null,
+	author_nationality varchar(50) not null
+);
+
+select book_name as Name, author_name as Author from tb_book
+join tb_author on tb_book.author_id = tb_author.author_id
