@@ -156,6 +156,46 @@ public class BookRepositoryTest {
 
         List<Book> list = bookRepository.findByNameOrIsbn(null, isbn);
         list.forEach(System.out::println);
+
+
+    }
+
+   @Test
+   public void getBookByDateBetween(){
+
+       LocalDate start = LocalDate.of(1920, 01, 19);
+       LocalDate end = LocalDate.of(1980, 01, 19);
+
+       List<Book> list = bookRepository.findByPublicationDateBetween(start, end);
+       list.forEach(System.out::println);
+    }
+
+   @Test
+   public void getBookByNameIsLike(){
+
+        String name = "The";
+        List<Book> list = bookRepository.findByNameLike("%"+name+"%");
+
+        list.forEach(System.out::println);
+
+   }
+
+   @Test
+    public void getAllBooks(){
+        List<Book> list = bookRepository.listAllBooksWithJQPL();
+        list.forEach(System.out::println);
+   }
+
+   @Test
+    public void getAuthorsFromBooks(){
+        List<Author> list = bookRepository.listAuthorsFromBooks();
+        list.forEach(System.out::println);
+   }
+
+   @Test
+    public void getBookAndAuthorName(){
+        List<String> list = bookRepository.listBookAndAuthorNames();
+        list.forEach(System.out::println);
    }
 
 
