@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+
+import static io.github.felipe_damasceno19.libraryapi.model.bookGenre.NOVEL;
 
 @SpringBootTest
 public class BookRepositoryTest {
@@ -27,7 +30,7 @@ public class BookRepositoryTest {
 
         book.setIsbn("89274-6742");
         book.setName("The Posthumous Memoirs of Brás Cubas");
-        book.setGenre(bookGenre.NOVEL);
+        book.setGenre(NOVEL);
         book.setPublicationDate(LocalDate.of(1880, 2,21));
         book.setPrice(BigDecimal.valueOf(45));
 
@@ -46,7 +49,7 @@ public class BookRepositoryTest {
 
         book.setIsbn("89274-6742");
         book.setName("The Posthumous Memoirs of Brás Cubas");
-        book.setGenre(bookGenre.NOVEL);
+        book.setGenre(NOVEL);
         book.setPublicationDate(LocalDate.of(1880, 2,14));
         book.setPrice(BigDecimal.valueOf(45));
 
@@ -66,7 +69,7 @@ public class BookRepositoryTest {
 
         book.setIsbn("98842-4342");
         book.setName("Crime and Punishment");
-        book.setGenre(bookGenre.NOVEL);
+        book.setGenre(NOVEL);
         book.setPublicationDate(LocalDate.of(1899, 9,1));
         book.setPrice(BigDecimal.valueOf(83));
 
@@ -117,5 +120,43 @@ public class BookRepositoryTest {
         System.out.println("Author : "+book.getAuthor().getName());
 
     }
+
+    @Test
+    public void getBookByNameTest(){
+
+        String name = "Animal Farm";
+        List<Book> bookName = bookRepository.findByName(name);
+        bookName.forEach(System.out::println);
+
+    }
+
+    @Test
+    public void getBookByIsbnTest(){
+        String isbn = "89274-6742";
+        List<Book> list = bookRepository.findByIsbn(isbn);
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void getBookByNameAndPriceTest(){
+
+        String name = "Animal Farm";
+        var price = BigDecimal.valueOf(25.00);
+
+        List<Book> list = bookRepository.findByNameAndPrice(name, price);
+        list.forEach(System.out::println);
+
+    }
+
+    @Test
+    public void getBookByNameOrIsbn(){
+
+        String name = "The Posthumous Memoirs of Brás Cubas";
+        String isbn = "89274-6742";
+
+        List<Book> list = bookRepository.findByNameOrIsbn(null, isbn);
+        list.forEach(System.out::println);
+   }
+
 
 }

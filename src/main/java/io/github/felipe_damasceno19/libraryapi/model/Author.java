@@ -28,6 +28,7 @@ public class Author {
     @Column(name = "author_nationality", length = 50, nullable = false)
     private String nationality;
 
+    //È padrão utilizar fetch type lazy em relações one to many
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> books;
 
