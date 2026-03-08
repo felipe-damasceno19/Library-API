@@ -2,7 +2,6 @@ package io.github.felipe_damasceno19.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
@@ -31,7 +30,7 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "book_genre", length = 30, nullable = false)
-    private bookGenre genre;
+    private BookGenre genre;
 
     @Column(name = "book_price"
             , precision = 18, scale = 2)

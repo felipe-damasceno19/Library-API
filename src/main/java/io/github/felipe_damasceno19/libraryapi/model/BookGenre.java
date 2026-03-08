@@ -1,6 +1,6 @@
 package io.github.felipe_damasceno19.libraryapi.model;
 
-public enum bookGenre {
+public enum BookGenre {
     FICTION,
     FANTASY,
     MISTERY,

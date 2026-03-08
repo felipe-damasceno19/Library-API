@@ -2,7 +2,7 @@ package io.github.felipe_damasceno19.libraryapi.repository;
 
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.model.Book;
-import io.github.felipe_damasceno19.libraryapi.model.bookGenre;
+import io.github.felipe_damasceno19.libraryapi.model.BookGenre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static io.github.felipe_damasceno19.libraryapi.model.bookGenre.NOVEL;
+import static io.github.felipe_damasceno19.libraryapi.model.BookGenre.NOVEL;
 
 @SpringBootTest
 public class BookRepositoryTest {
@@ -197,6 +197,19 @@ public class BookRepositoryTest {
         List<String> list = bookRepository.listBookAndAuthorNames();
         list.forEach(System.out::println);
    }
+
+   @Test
+    public void getBookByGenreWithParam(){
+        List<Book> list = bookRepository.findByGenre(NOVEL);
+        list.forEach(System.out::println);
+   }
+    @Test
+    public void getBookByGenreWithPositionalParam(){
+        List<Book> list = bookRepository.findByGenrePositionalParameters(NOVEL);
+        list.forEach(System.out::println);
+    }
+
+
 
 
 }

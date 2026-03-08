@@ -2,9 +2,10 @@ package io.github.felipe_damasceno19.libraryapi.repository;
 
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.model.Book;
-import jakarta.persistence.EnumType;
+import io.github.felipe_damasceno19.libraryapi.model.BookGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     // select * from tb_book where book_publication_date between ? and ?
     List<Book> findByPublicationDateBetween(LocalDate start, LocalDate end);
 
+
     // select * from tb_book where book_name like ?
     // Pode usar tambem o findBy...Containing , ou StartingWith, ou EndingWith. Tudo depende da situação
     List<Book> findByNameLike(String name);
@@ -45,6 +47,17 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     @Query("select b.name, a.name from Book b join b.author a")
     List<String> listBookAndAuthorNames();
+
+    // named parameters -> parametros nomeados
+    @Query("select b from Book b where b.genre = :genre")
+    List<Book> findByGenre(@Param("genre") BookGenre bookGenre);
+
+    // positional parameters -> parametros posicionais
+    @Query("select b from Book b where b.genre = ?1")
+    List<Book> findByGenrePositionalParameters(BookGenre bookGenre);
+
+
+
 
 }
 

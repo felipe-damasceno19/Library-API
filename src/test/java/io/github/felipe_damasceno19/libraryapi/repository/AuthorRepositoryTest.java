@@ -2,12 +2,10 @@ package io.github.felipe_damasceno19.libraryapi.repository;
 
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.model.Book;
-import io.github.felipe_damasceno19.libraryapi.model.bookGenre;
+import io.github.felipe_damasceno19.libraryapi.model.BookGenre;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -93,7 +91,7 @@ public class AuthorRepositoryTest {
         Book book = new Book();
         book.setIsbn("12484-2463");
         book.setName("1984");
-        book.setGenre(bookGenre.NOVEL);
+        book.setGenre(BookGenre.NOVEL);
         book.setPublicationDate(LocalDate.of(1955, 6,19));
         book.setPrice(BigDecimal.valueOf(35));
         book.setAuthor(author);
@@ -101,7 +99,7 @@ public class AuthorRepositoryTest {
         Book book2 = new Book();
         book2.setIsbn("12484-2434");
         book2.setName("Animal Farm");
-        book2.setGenre(bookGenre.NOVEL);
+        book2.setGenre(BookGenre.NOVEL);
         book2.setPublicationDate(LocalDate.of(1950, 2,28));
         book2.setPrice(BigDecimal.valueOf(25));
         book2.setAuthor(author);
