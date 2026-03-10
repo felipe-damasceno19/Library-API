@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static io.github.felipe_damasceno19.libraryapi.model.BookGenre.FANTASY;
 import static io.github.felipe_damasceno19.libraryapi.model.BookGenre.NOVEL;
 
 @SpringBootTest
@@ -68,15 +69,15 @@ public class BookRepositoryTest {
         Book book = new Book();
 
         book.setIsbn("98842-4342");
-        book.setName("Crime and Punishment");
-        book.setGenre(NOVEL);
-        book.setPublicationDate(LocalDate.of(1899, 9,1));
-        book.setPrice(BigDecimal.valueOf(83));
+        book.setName("Lord of The Rings");
+        book.setGenre(FANTASY);
+        book.setPublicationDate(LocalDate.of(1958, 4,14));
+        book.setPrice(BigDecimal.valueOf(113));
 
         Author author = new Author();
-        author.setName("Fiódor Dostoievski");
-        author.setNationality("Russian");
-        author.setBirthDate(LocalDate.of(1840, 7, 21));
+        author.setName("J.R.R Tolkienn");
+        author.setNationality("American");
+        author.setBirthDate(LocalDate.of(1900, 7, 21));
 
         authorRepository.save(author);
 
@@ -92,7 +93,7 @@ public class BookRepositoryTest {
         var bookToUpdate = bookRepository.findById(id).orElse(null);
 
         UUID idAutor = UUID.fromString("16436a82-cb86-4546-8501-1a81f03dee8d");
-                Author newAuthor = authorRepository.findById(idAutor).orElse(null);
+        Author newAuthor = authorRepository.findById(idAutor).orElse(null);
 
         bookToUpdate.setAuthor(newAuthor);
 
@@ -209,6 +210,17 @@ public class BookRepositoryTest {
         list.forEach(System.out::println);
     }
 
+    @Test
+    public void deleteByGenre(){
+        bookRepository.deleteByGenre(FANTASY);
+        System.out.println("Sucess Delete!");
+    }
+
+    @Test
+    public void updateBookPrice(){
+        UUID id = UUID.fromString("32bc34de-7e80-4512-b4c2-263fc6745a78");
+        bookRepository.updateBookPrice(BigDecimal.valueOf(43.00), id);
+    }
 
 
 

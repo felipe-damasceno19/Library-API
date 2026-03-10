@@ -4,8 +4,10 @@ import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.model.Book;
 import io.github.felipe_damasceno19.libraryapi.model.BookGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -56,7 +58,16 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     @Query("select b from Book b where b.genre = ?1")
     List<Book> findByGenrePositionalParameters(BookGenre bookGenre);
 
+    //Toda vez que for fazer operações de escrita é necessário utilizar essas duas annotation
+    @Modifying
+    @Transactional
+    @Query("delete from Book where genre = ?1")
+    public void deleteByGenre(BookGenre genre);
 
+    @Modifying
+    @Transactional
+    @Query("update Book set price = ?1 where id = ?2")
+    public void updateBookPrice(BigDecimal price, UUID id);
 
 
 }
