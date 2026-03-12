@@ -32,10 +32,13 @@ public class Author {
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> books;
 
-// Método auxiliar para adicionar livros em lista de um mesmo autor
-//    public void addBook(Book book){
-//        books.add(book);
-//        book.setAuthor(this);
-//    }
+    /*
+         Método auxiliar para adicionar livros em lista de um mesmo autor
+         public void addBook(Book book){
+             books.add(book);
+             book.setAuthor(this);
+          }
+      */
+
 
 }

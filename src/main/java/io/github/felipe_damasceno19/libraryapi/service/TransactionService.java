@@ -30,7 +30,7 @@ public class TransactionService {
     @Transactional
     public void updateWithoutUpdate(){
 
-        var book = bookRepository.findById(UUID.fromString("32bc34de-7e80-4512-b4c2-263fc6745a78")).orElse(null);
+        var book = bookRepository.findById(UUID.fromString("32bc34de-7e80-4512-b4c2-263fc6745a78")).orElseThrow();
         book.setPublicationDate(LocalDate.of(1948, 11, 02));
 
     }
