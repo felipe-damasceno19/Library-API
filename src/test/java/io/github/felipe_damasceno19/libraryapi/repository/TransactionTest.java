@@ -22,4 +22,9 @@ public class TransactionTest {
         transactionService.execute();
     }
 
+    @Test
+    void managedTransaction(){
+
+        transactionService.updateWithoutUpdate();
+    }
 }

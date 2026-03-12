@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static io.github.felipe_damasceno19.libraryapi.model.BookGenre.FANTASY;
 import static io.github.felipe_damasceno19.libraryapi.model.BookGenre.NOVEL;
@@ -23,6 +24,16 @@ public class TransactionService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    // È possível fazer uma atualização em um objeto sem ter que dar o save,
+    // pois so de estar dentro de uma transaction ele ja faz isso
+    @Transactional
+    public void updateWithoutUpdate(){
+
+        var book = bookRepository.findById(UUID.fromString("32bc34de-7e80-4512-b4c2-263fc6745a78")).orElse(null);
+        book.setPublicationDate(LocalDate.of(1948, 11, 02));
+
+    }
 
     @Transactional
     public void execute(){
