@@ -3,8 +3,12 @@ package io.github.felipe_damasceno19.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +16,8 @@ import java.util.UUID;
 @Data
 @ToString(exclude = "books")
 @Table(name = "tb_author", schema = "public")
+// Ve se tem as annotations
+@EntityListeners(AuditingEntityListener.class)
 public class Author {
 
     @Id
@@ -31,6 +37,19 @@ public class Author {
     //È padrão utilizar fetch type lazy em relações one to many
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> books;
+
+    //Assim que um autor for registrado, essa anotação faz com que a data do momento do registro seja salva
+    @CreatedDate
+    @Column(name = "author_register_date")
+    private LocalDateTime registerDate;
+
+    //Assim que um autor for atualizado, essa annotation salva o mommento da atualização
+    @LastModifiedDate
+    @Column(name = "author_update_date")
+    private LocalDateTime updateDate;
+
+    @Column(name = "user_id")
+    private UUID userId;
 
     /*
          Método auxiliar para adicionar livros em lista de um mesmo autor
