@@ -1,7 +1,9 @@
 package io.github.felipe_damasceno19.libraryapi.service;
 
+import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
+import io.github.felipe_damasceno19.libraryapi.repository.BookRepository;
 import io.github.felipe_damasceno19.libraryapi.validator.AuthorValidator;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
+    private final BookRepository bookRepository;
 
-    public AuthorService(AuthorRepository repository, AuthorValidator validator){
+    public AuthorService(AuthorRepository repository, AuthorValidator validator, BookRepository bookRepository){
         this.repository = repository;
         this.validator = validator;
+        this.bookRepository = bookRepository;
     }
 
     public Author save(Author author){
@@ -38,6 +42,9 @@ public class AuthorService {
     }
 
     public void delete(Author author){
+       if(haveBook(author)){
+           throw new OperationNotAllowed("Cannot delete author: registered books found");
+       }
        repository.delete(author);
     }
 
@@ -55,5 +62,8 @@ public class AuthorService {
         return repository.findAll();
     }
 
+    public boolean haveBook(Author author){
+        return bookRepository.existsByAuthor(author);
+    }
 
 }

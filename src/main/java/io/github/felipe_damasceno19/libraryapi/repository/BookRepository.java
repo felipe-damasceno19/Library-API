@@ -20,6 +20,8 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     // select * from tb_book where author_id = ?
     List<Book> findByAuthor(Author author);
 
+    boolean existsByAuthor(Author author);
+
     // select * from tb_book where book_name = ?
     List<Book> findByName(String name);
 

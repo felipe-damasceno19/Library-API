@@ -3,6 +3,7 @@ package io.github.felipe_damasceno19.libraryapi.controller;
 import io.github.felipe_damasceno19.libraryapi.controller.dto.AuthorDTO;
 import io.github.felipe_damasceno19.libraryapi.controller.dto.ResponseError;
 import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationException;
+import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
 import org.springframework.http.ResponseEntity;
@@ -65,16 +66,23 @@ public class AuthorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") String id){
-        var authorId = UUID.fromString(id);
-        Optional<Author> author = service.getById(authorId);
+    public ResponseEntity<Object> delete(@PathVariable("id") String id){
+        try{
+            var authorId = UUID.fromString(id);
+            Optional<Author> author = service.getById(authorId);
 
-        if(author.isEmpty()){
-            return ResponseEntity.notFound().build();
+            if(author.isEmpty()){
+                return ResponseEntity.notFound().build();
+            }
+
+            service.delete(author.get());
+            return ResponseEntity.noContent().build();
+        }
+        catch (OperationNotAllowed e){
+            var dtoError = ResponseError.defaultResponse(e.getMessage());
+            return ResponseEntity.status(dtoError.status()).body(dtoError);
         }
 
-        service.delete(author.get());
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
