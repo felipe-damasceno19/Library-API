@@ -101,7 +101,7 @@ public class AuthorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody AuthorDTO dto){
+    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody @Valid AuthorDTO dto){
         try{
             var uuid = UUID.fromString(id);
             Optional<Author> authorOptional = service.getById(uuid);
