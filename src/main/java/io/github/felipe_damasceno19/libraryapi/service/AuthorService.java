@@ -6,6 +6,8 @@ import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
 import io.github.felipe_damasceno19.libraryapi.repository.BookRepository;
 import io.github.felipe_damasceno19.libraryapi.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +59,22 @@ public class AuthorService {
             return repository.findByNationality(nationality);
         }
         return repository.findAll();
+    }
+
+    public List<Author> searchByExample(String name, String nationality){
+        var author = new Author();
+        author.setName(name);
+        author.setNationality(nationality);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Author> authorExample = Example.of(author, matcher);
+
+        return repository.findAll(authorExample);
+
     }
 
     public boolean haveBook(Author author){
