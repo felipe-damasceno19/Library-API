@@ -6,6 +6,7 @@ import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationE
 import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,13 +19,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/authors")
+@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService service;
-
-    public AuthorController(AuthorService service){
-        this.service = service;
-    }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO){

@@ -5,6 +5,7 @@ import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
 import io.github.felipe_damasceno19.libraryapi.repository.BookRepository;
 import io.github.felipe_damasceno19.libraryapi.validator.AuthorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +13,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+//Gera um construtor para todas as propriedades que tem final no nome
+@RequiredArgsConstructor
 public class AuthorService {
 
     private final AuthorRepository repository;
     private final AuthorValidator validator;
     private final BookRepository bookRepository;
-
-    public AuthorService(AuthorRepository repository, AuthorValidator validator, BookRepository bookRepository){
-        this.repository = repository;
-        this.validator = validator;
-        this.bookRepository = bookRepository;
-    }
 
     public Author save(Author author){
         validator.validate(author);

@@ -3,18 +3,17 @@ package io.github.felipe_damasceno19.libraryapi.validator;
 import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationException;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorValidator {
 
-    private AuthorRepository repository;
+    private final AuthorRepository repository;
 
-    public AuthorValidator(AuthorRepository repository) {
-        this.repository = repository;
-    }
 
     public void validate(Author author){
         if (existAuthoRegistered(author)){
