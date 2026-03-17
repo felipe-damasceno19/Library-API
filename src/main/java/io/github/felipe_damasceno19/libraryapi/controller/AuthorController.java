@@ -6,6 +6,7 @@ import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationE
 import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AuthorController {
     private final AuthorService service;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO){
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO){
         try{
             Author authorEntity = authorDTO.mappinngAuthor();
             service.save(authorEntity);
