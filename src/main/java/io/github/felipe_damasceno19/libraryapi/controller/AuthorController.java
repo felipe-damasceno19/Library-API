@@ -1,6 +1,8 @@
 package io.github.felipe_damasceno19.libraryapi.controller;
 
 import io.github.felipe_damasceno19.libraryapi.controller.dto.AuthorDTO;
+import io.github.felipe_damasceno19.libraryapi.controller.dto.ResponseError;
+import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationException;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +26,27 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody AuthorDTO authorDTO){
-        Author authorEntity = authorDTO.mappinngAuthor();
-        service.save(authorEntity);
+    public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO){
+        try{
+            Author authorEntity = authorDTO.mappinngAuthor();
+            service.save(authorEntity);
 
-        // Pega os dados da requisição atual e constroi uma nova url, pegando o Id e colocando no url
-        // localhost:8080/authors/id
-        URI location = ServletUriComponentsBuilder
-                        .fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(authorEntity.getId())
-                        .toUri();
+            // Pega os dados da requisição atual e constroi uma nova url, pegando o Id e colocando no url
+            // localhost:8080/authors/id
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(authorEntity.getId())
+                    .toUri();
 
-        //Retorna o status de created e o URI de location que criamos
-        return ResponseEntity.created(location).build();
+            //Retorna o status de created e o URI de location que criamos
+            return ResponseEntity.created(location).build();
+        }
+        catch (DuplicateRegistrationException e){
+            var dtoError = ResponseError.conflict(e.getMessage());
+            return ResponseEntity.status(dtoError.status()).body(dtoError);
+        }
+
     }
 
     @GetMapping("{id}")
@@ -85,22 +94,29 @@ public class AuthorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") String id, @RequestBody AuthorDTO dto){
-        var uuid = UUID.fromString(id);
-        Optional<Author> authorOptional = service.getById(uuid);
+    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody AuthorDTO dto){
+        try{
+            var uuid = UUID.fromString(id);
+            Optional<Author> authorOptional = service.getById(uuid);
 
-        if(authorOptional.isEmpty()){
-            return ResponseEntity.notFound().build();
+            if(authorOptional.isEmpty()){
+                return ResponseEntity.notFound().build();
+            }
+
+            var author = authorOptional.get();
+            author.setName(dto.name());
+            author.setNationality(dto.nationality());
+            author.setBirthDate(dto.birthDate());
+
+            service.update(author);
+
+            return ResponseEntity.noContent().build();
+        }
+        catch (DuplicateRegistrationException e){
+            var dtoError = ResponseError.conflict(e.getMessage());
+            return ResponseEntity.status(dtoError.status()).body(dtoError);
         }
 
-        var author = authorOptional.get();
-        author.setName(dto.name());
-        author.setNationality(dto.nationality());
-        author.setBirthDate(dto.birthDate());
-
-        service.update(author);
-
-        return ResponseEntity.noContent().build();
     }
 
 

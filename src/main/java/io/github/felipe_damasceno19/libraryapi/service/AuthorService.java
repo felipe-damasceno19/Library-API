@@ -2,6 +2,7 @@ package io.github.felipe_damasceno19.libraryapi.service;
 
 import io.github.felipe_damasceno19.libraryapi.model.Author;
 import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
+import io.github.felipe_damasceno19.libraryapi.validator.AuthorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +13,15 @@ import java.util.UUID;
 public class AuthorService {
 
     private final AuthorRepository repository;
+    private final AuthorValidator validator;
 
-    public AuthorService(AuthorRepository repository){
+    public AuthorService(AuthorRepository repository, AuthorValidator validator){
         this.repository = repository;
+        this.validator = validator;
     }
 
     public Author save(Author author){
+        validator.validate(author);
         return repository.save(author);
     }
 
@@ -25,6 +29,7 @@ public class AuthorService {
         if(author.getId() == null){
             throw new IllegalArgumentException("Author doesnt exist!");
         }
+        validator.validate(author);
         repository.save(author);
     }
 
