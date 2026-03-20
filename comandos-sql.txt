@@ -1,6 +1,6 @@
 CREATE TABLE tb_book(
 	book_id uuid not null primary key,
-	book_isbn varchar(20) not null,
+	book_isbn varchar(20) not null unique,
 	book_name varchar(150) not null,
 	book_publication_date date not null,
 	book_genre varchar(30) not null,
