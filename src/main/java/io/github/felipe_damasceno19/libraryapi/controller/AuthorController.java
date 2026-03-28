@@ -2,6 +2,7 @@ package io.github.felipe_damasceno19.libraryapi.controller;
 
 import io.github.felipe_damasceno19.libraryapi.controller.dto.AuthorDTO;
 import io.github.felipe_damasceno19.libraryapi.controller.dto.ResponseError;
+import io.github.felipe_damasceno19.libraryapi.controller.mappers.AuthorMapper;
 import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationException;
 import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
@@ -24,19 +25,20 @@ import java.util.stream.Collectors;
 public class AuthorController {
 
     private final AuthorService service;
+    private final AuthorMapper mapper;
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO){
         try{
-            Author authorEntity = authorDTO.mappinngAuthor();
-            service.save(authorEntity);
+            Author author = mapper.toEntity(authorDTO);
+            service.save(author);
 
             // Pega os dados da requisição atual e constroi uma nova url, pegando o Id e colocando no url
             // localhost:8080/authors/id
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(authorEntity.getId())
+                    .buildAndExpand(author.getId())
                     .toUri();
 
             //Retorna o status de created e o URI de location que criamos
@@ -52,16 +54,14 @@ public class AuthorController {
     @GetMapping("{id}")
     public ResponseEntity<AuthorDTO> get(@PathVariable("id") String id){
         var authorId = UUID.fromString(id);
-        Optional<Author> author = service.getById(authorId);
+        Optional<Author> optionalAuthor = service.getById(authorId);
 
-        if(author.isPresent()){
-            Author entity = author.get();
-            AuthorDTO dto = new AuthorDTO(entity.getId(),entity.getName(),
-                        entity.getBirthDate(), entity.getNationality());
-            return ResponseEntity.ok(dto);
+        return service.getById(authorId)
+            .map(author -> {
+                AuthorDTO dto = mapper.toDTO(author);
+                return ResponseEntity.ok(dto);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
 
-        }
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("{id}")
@@ -90,14 +90,10 @@ public class AuthorController {
 
         List<Author> result = service.searchByExample(name, nationality);
         List<AuthorDTO> list = result.stream()
-                .map(author -> new AuthorDTO(author.getId()
-                , author.getName()
-                , author.getBirthDate()
-                , author.getNationality())
-                ).collect(Collectors.toList());
-
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        
         return ResponseEntity.ok(list);
-
     }
 
     @PutMapping("{id}")

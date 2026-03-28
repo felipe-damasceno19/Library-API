@@ -16,7 +16,6 @@ import java.util.UUID;
 @Data
 @ToString(exclude = "books")
 @Table(name = "tb_author", schema = "public")
-// Ve se tem as annotations
 @EntityListeners(AuditingEntityListener.class)
 public class Author {
 
