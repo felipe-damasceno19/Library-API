@@ -10,8 +10,10 @@ import org.mapstruct.Mapping;
 public interface AuthorMapper {
 
     //Caso os nomes sejam diferentes, voce pode mapear usando essa annotation
-    @Mapping(source = "nome", target = "nome")
+    @Mapping(source = "name", target = "name")
     Author toEntity(AuthorDTO authorDTO);
 
     AuthorDTO toDTO(Author author);
+
+
 }

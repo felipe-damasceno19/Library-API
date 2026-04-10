@@ -92,7 +92,7 @@ public class AuthorController {
         List<AuthorDTO> list = result.stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
-        
+
         return ResponseEntity.ok(list);
     }
 
