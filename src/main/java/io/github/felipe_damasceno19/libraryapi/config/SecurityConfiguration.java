@@ -16,8 +16,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable) // Permite outras aplicações enviarem requisições http
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
+                .formLogin(configurer -> {
+                    configurer.loginPage("/login").permitAll();
+                })
+                //.httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.anyRequest().authenticated();
                 })
