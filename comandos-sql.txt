@@ -25,3 +25,4 @@ CREATE TABLE tb_author(
 
 select book_name as Name, author_name as Author from tb_book
 join tb_author on tb_book.author_id = tb_author.author_id
+
