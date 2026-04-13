@@ -1,5 +1,7 @@
 package io.github.felipe_damasceno19.libraryapi.config;
 
+import io.github.felipe_damasceno19.libraryapi.security.CustomUserDetailService;
+import io.github.felipe_damasceno19.libraryapi.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,9 +31,10 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login").permitAll();
-                    authorize.requestMatchers(HttpMethod.POST, "/users/**").hasRole("ADMIN");
                     authorize.requestMatchers("/authors/**").hasRole("ADMIN");
                     authorize.requestMatchers("/books/**").hasAnyRole("USER", "ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
+                    authorize.anyRequest().authenticated();
                 })
                 .build();
     }
@@ -41,22 +44,27 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
+//    @Bean
+//    public UserDetailsService userDetailsService(PasswordEncoder encoder){
+//
+//        UserDetails user1 = User.builder()
+//                .username("felipe")
+//                .password(encoder.encode("123"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails user2 = User.builder()
+//                .username("Gabriel")
+//                .password(encoder.encode("123"))
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
+
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder){
-
-        UserDetails user1 = User.builder()
-                .username("felipe")
-                .password(encoder.encode("123"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user2 = User.builder()
-                .username("Gabriel")
-                .password(encoder.encode("123"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
+    public UserDetailsService userDetailsService(UserService userService){
+        return new CustomUserDetailService(userService);
     }
 
 }
