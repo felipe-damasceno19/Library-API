@@ -6,6 +6,8 @@ import io.github.felipe_damasceno19.libraryapi.controller.mappers.AuthorMapper;
 import io.github.felipe_damasceno19.libraryapi.exceptions.DuplicateRegistrationException;
 import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
+import io.github.felipe_damasceno19.libraryapi.model.SystemUser;
+import io.github.felipe_damasceno19.libraryapi.security.SecurityService;
 import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,9 @@ public class AuthorController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO){
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO) {
         try{
+
             Author author = mapper.toEntity(authorDTO);
             service.save(author);
 
@@ -42,6 +45,7 @@ public class AuthorController {
                     .path("/{id}")
                     .buildAndExpand(author.getId())
                     .toUri();
+
 
             //Retorna o status de created e o URI de location que criamos
             return ResponseEntity.created(location).build();

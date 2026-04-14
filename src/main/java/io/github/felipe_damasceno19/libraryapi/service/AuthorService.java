@@ -2,8 +2,10 @@ package io.github.felipe_damasceno19.libraryapi.service;
 
 import io.github.felipe_damasceno19.libraryapi.exceptions.OperationNotAllowed;
 import io.github.felipe_damasceno19.libraryapi.model.Author;
+import io.github.felipe_damasceno19.libraryapi.model.SystemUser;
 import io.github.felipe_damasceno19.libraryapi.repository.AuthorRepository;
 import io.github.felipe_damasceno19.libraryapi.repository.BookRepository;
+import io.github.felipe_damasceno19.libraryapi.security.SecurityService;
 import io.github.felipe_damasceno19.libraryapi.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -22,9 +24,12 @@ public class AuthorService {
     private final AuthorRepository repository;
     private final AuthorValidator validator;
     private final BookRepository bookRepository;
+    private final SecurityService securityService;
 
     public Author save(Author author){
         validator.validate(author);
+        SystemUser user = securityService.getUserLogged();
+        author.setUser(user);
         return repository.save(author);
     }
 
@@ -80,5 +85,6 @@ public class AuthorService {
     public boolean haveBook(Author author){
         return bookRepository.existsByAuthor(author);
     }
+
 
 }

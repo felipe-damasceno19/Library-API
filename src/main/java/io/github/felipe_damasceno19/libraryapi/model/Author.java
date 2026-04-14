@@ -47,8 +47,9 @@ public class Author {
     @Column(name = "author_update_date")
     private LocalDateTime updateDate;
 
-    @Column(name = "user_id")
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private SystemUser user;
 
     /*
          Método auxiliar para adicionar livros em lista de um mesmo autor
