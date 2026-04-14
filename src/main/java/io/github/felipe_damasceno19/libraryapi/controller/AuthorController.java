@@ -10,6 +10,7 @@ import io.github.felipe_damasceno19.libraryapi.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +29,7 @@ public class AuthorController {
     private final AuthorMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> save(@RequestBody @Valid AuthorDTO authorDTO){
         try{
             Author author = mapper.toEntity(authorDTO);
@@ -64,6 +66,7 @@ public class AuthorController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") String id){
         try{
@@ -96,6 +99,7 @@ public class AuthorController {
         return ResponseEntity.ok(list);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody @Valid AuthorDTO dto){
         try{
